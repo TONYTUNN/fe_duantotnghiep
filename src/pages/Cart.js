@@ -56,7 +56,7 @@ const Cart = () => {
 
   const calculateTotal = () => {
     const total = cartItems.reduce(
-      (total, item) => total + Number(item.Price) * item.quantity,
+      (total, item) => total + Number(item.Price) *1000* item.quantity,
       0,
     );
     return new Intl.NumberFormat('vi-VN', {
@@ -86,7 +86,7 @@ const Cart = () => {
                     <h4>{item.Name}</h4>
                     <p>{item.Description}</p>
                     <div className="item-actions">
-                      <input
+                      <input min="1"
                         type="number"
                         value={item.quantity}
                         onChange={e =>
@@ -109,9 +109,10 @@ const Cart = () => {
                       {new Intl.NumberFormat('vi-VN', {
                         style: 'currency',
                         currency: 'VND',
-                      }).format(parseFloat(item.Price + '000') * item.quantity)}
+                      }).format(item.Price * 1000 * item.quantity)}
                     </p>
                   </div>
+
                 </div>
               ))}
             </div>

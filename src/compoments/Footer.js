@@ -52,24 +52,24 @@ const Footer = () => {
           <Col lg={6} md={12} className="mb-4 mb-md-0">
             <h5 className="text-uppercase">Häagen-Dazs</h5>
             <p style={{color:'#fff'}}>
-              Enjoy the best ice cream in town! Made with the freshest ingredients and love.
+            Thưởng thức kem ngon nhất trong thị trấn! Được làm từ những nguyên liệu tươi ngon nhất và tình yêu.
             </p>
           </Col>
           <Col lg={3} md={6} className="mb-4 mb-md-0">
-            <h5 className="text-uppercase">Links</h5>
+            <h5 className="text-uppercase">Link</h5>
             <ul className="list-unstyled mb-0">
-              <li><a href="/" style={{ color: '#fff' }}>Home</a></li>
-              <li><a href="/products" style={{ color: '#fff' }}>Products</a></li>
-              <li><a href="/cart" style={{ color: '#fff' }}>Cart</a></li>
-              <li><a href="/contact" style={{ color: '#fff' }}>Contact</a></li>
+              <li><a href="/" style={{ color: '#fff' }}>Trang chủ</a></li>
+              <li><a href="/products" style={{ color: '#fff' }}>Sản Phẩm</a></li>
+              <li><a href="/cart" style={{ color: '#fff' }}>Giở hàng</a></li>
+              <li><a href="/contact" style={{ color: '#fff' }}>Liên Hệ</a></li>
             </ul>
           </Col>
           <Col lg={3} md={6} className="mb-4 mb-md-0">
-            <h5 className="text-uppercase">Contact</h5>
+            <h5 className="text-uppercase">Liên Hệ</h5>
             <ul className="list-unstyled mb-0">
-              <li><span style={{ color: '#fff' }}>Email: info@icecreamshop.com</span></li>
-              <li><span style={{ color: '#fff' }}>Phone: +123 456 789</span></li>
-              <li><span style={{ color: '#fff' }}>Address: 123 Ice Cream St.</span></li>
+              <li><span style={{ color: '#fff' }}>Email: Merana@gmail.com</span></li>
+              <li><span style={{ color: '#fff' }}>Số điện thoại: +123 456 789</span></li>
+              <li><span style={{ color: '#fff' }}>Địa chỉ: 123 Ice Cream St.</span></li>
             </ul>
           </Col>
         </Row>

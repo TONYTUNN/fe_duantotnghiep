@@ -49,10 +49,10 @@ const CustomNavbar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <LinkContainer to="/products">
-              <Nav.Link>Products</Nav.Link>
+              <Nav.Link>Sản Phẩm</Nav.Link>
             </LinkContainer>
             <NavDropdown
-              title="Categories"
+              title="Danh mục"
               id="basic-nav-dropdown"
               className="custom-dropdown"
               style={{
@@ -84,13 +84,13 @@ const CustomNavbar = () => {
               )}
             </NavDropdown>
             <LinkContainer to="/about">
-              <Nav.Link>About</Nav.Link>
+              <Nav.Link>Giới Thiệu</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/contact">
-              <Nav.Link>Contact</Nav.Link>
+              <Nav.Link>Liên Hệ</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/Promotion">
-              <Nav.Link>Promotion</Nav.Link>
+              <Nav.Link>Khuyễn Mãi</Nav.Link>
             </LinkContainer>
           </Nav>
           <Nav className="ms-auto">
@@ -109,7 +109,7 @@ const CustomNavbar = () => {
                 </NavDropdown.Item>
                 <NavDropdown.Item>
                   <LinkContainer to="/profile">
-                    <Nav.Link>Profile</Nav.Link>
+                    <Nav.Link>Trang cá nhân</Nav.Link>
                   </LinkContainer>
                 </NavDropdown.Item>
                 {user.Role === 'admin' && ( // Hiển thị menu Admin nếu vai trò là admin
@@ -126,7 +126,7 @@ const CustomNavbar = () => {
                     style={{ background: '#73262C', color: '#fff' }}
                     onClick={handleLogout}
                   >
-                    Logout
+                    Thoát
                   </Button>
                 </NavDropdown.Item>
               </NavDropdown>

@@ -10,8 +10,11 @@ import 'react-toastify/dist/ReactToastify.css';
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(''); // Thêm trạng thái thành công
+  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+
+  // Giả sử vai trò của người dùng hiện tại được lưu trong localStorage
+  const currentUserRole = localStorage.getItem('userRole'); // Lấy vai trò người dùng hiện tại
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -28,25 +31,35 @@ const UserManagement = () => {
 
   const handleHideUser = async userId => {
     try {
-      await axios.patch(`http://localhost:4000/users/${userId}/hide`);
+      const userToUpdate = users.find(user => user.CustomerID === userId);
+      if (!userToUpdate) {
+        setError('Không tìm thấy người dùng.');
+        return;
+      }
+
+      const newStatus = !userToUpdate.IsActive; // Đảo ngược trạng thái IsActive
+      await axios.patch(`http://localhost:4000/users/${userId}/hide`, { IsActive: newStatus });
+
+      // Cập nhật lại danh sách người dùng
       setUsers(
         users.map(user =>
-          user.CustomerID === userId ? { ...user, IsActive: false } : user,
-        ),
+          user.CustomerID === userId ? { ...user, IsActive: newStatus } : user
+        )
       );
-      setSuccess('Người dùng đã được ẩn thành công.'); // Cập nhật thông báo thành công
+      setSuccess(`Người dùng đã được ${newStatus ? 'hiện' : 'ẩn'} thành công.`);
+
+      toast.success(`${newStatus ? 'Hiện' : 'Ẩn'} thành công!`, {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (err) {
       setError('Lỗi khi ẩn người dùng.');
     }
-    toast.success('Ẩn thành công!', {
-      position: 'top-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
   };
 
   const handleEditUser = userId => {
@@ -59,8 +72,7 @@ const UserManagement = () => {
         Danh sách người dùng
       </h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <Alert variant="success">{success}</Alert>}{' '}
-      {/* Hiển thị thông báo thành công */}
+      {success && <Alert variant="success">{success}</Alert>}
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -92,13 +104,16 @@ const UserManagement = () => {
                 >
                   Sửa
                 </Button>
-                <Button
-                  className="btn_hiddens"
-                  style={{ marginLeft: '10px' }}
-                  onClick={() => handleHideUser(user.CustomerID)}
-                >
-                  Ẩn
-                </Button>
+                {/* Nút Ẩn/Hiện chỉ hiển thị nếu người dùng không phải là admin */}
+                {user.Role !== 'admin' && (
+                  <Button
+                    className="btn_hiddens"
+                    style={{ marginLeft: '10px' }}
+                    onClick={() => handleHideUser(user.CustomerID)}
+                  >
+                    {user.IsActive ? 'Ẩn' : 'Hiện'}
+                  </Button>
+                )}
               </td>
             </tr>
           ))}
@@ -109,3 +124,4 @@ const UserManagement = () => {
 };
 
 export default UserManagement;
+

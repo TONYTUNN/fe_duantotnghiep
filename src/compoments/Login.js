@@ -137,11 +137,11 @@ const Login = () => {
     <div style={loginBackground} className="conainer-login">
       <div style={overlayStyle}></div>
       <Container style={formStyle}>
-        <h1 style={{ textAlign: 'center' }}>Login</h1>
+        <h1 style={{ textAlign: 'center' }}>Đăng nhập</h1>
         {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicEmail">
-            <Form.Label style={{ fontWeight: '600' }}>Email address</Form.Label>
+            <Form.Label style={{ fontWeight: '600' }}>Email</Form.Label>
             <Form.Control
               type="email"
               placeholder="Enter email"
@@ -153,7 +153,7 @@ const Login = () => {
 
           <Form.Group controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: '600', margin: '10px 0' }}>
-              Password
+              Mật khẩu
             </Form.Label>
             <Form.Control
               type="password"
@@ -170,7 +170,7 @@ const Login = () => {
             className="btn-login"
             style={{ background: '#73262C', color: '#fff' }}
           >
-            Login
+            Đăng nhập
           </Button>
         </Form>
 
@@ -180,7 +180,7 @@ const Login = () => {
         <hr />
         <ReactFacebookLogin
           className="DNfacebook"
-          appId="1006850874260315" //
+          appId="1028108995645454" //
           autoLoad={false}
           fields="name,email,picture"
           callback={responseFacebook}

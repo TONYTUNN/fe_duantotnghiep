@@ -89,14 +89,14 @@ const Signup = () => {
     <div style={signupBackground}>
       <div style={overlayStyle}></div>
       <Container style={formStyle}>
-        <h1 style={{textAlign:'center'}}>Sign Up</h1>
+        <h1 style={{textAlign:'center'}}>Đăng ký</h1>
         {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicFirstName">
-            <Form.Label style={{fontWeight:'600'}}>First Name</Form.Label>
+            <Form.Label style={{fontWeight:'600'}}>Họ</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter first name"
+              placeholder="Họ"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               required
@@ -104,10 +104,10 @@ const Signup = () => {
           </Form.Group>
 
           <Form.Group controlId="formBasicLastName">
-            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Last Name</Form.Label>
+            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Tên</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter last name"
+              placeholder="Tên"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               required
@@ -115,10 +115,10 @@ const Signup = () => {
           </Form.Group>
 
           <Form.Group controlId="formBasicEmail">
-            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Email address</Form.Label>
+            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Địa chỉ email</Form.Label>
             <Form.Control
               type="email"
-              placeholder="Enter email"
+              placeholder="Địa chỉ email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -126,10 +126,10 @@ const Signup = () => {
           </Form.Group>
 
           <Form.Group controlId="formBasicPassword">
-            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Password</Form.Label>
+            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Mật khẩu</Form.Label>
             <Form.Control
               type="password"
-              placeholder="Password"
+              placeholder="Mật khẩu"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -137,10 +137,10 @@ const Signup = () => {
           </Form.Group>
 
           <Form.Group controlId="formConfirmPassword">
-            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Confirm Password</Form.Label>
+            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Nhập lại mật khẩu</Form.Label>
             <Form.Control
               type="password"
-              placeholder="Confirm Password"
+              placeholder="Nhập lại mật khẩu"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
@@ -148,28 +148,28 @@ const Signup = () => {
           </Form.Group>
 
           <Form.Group controlId="formBasicAddress">
-            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Address</Form.Label>
+            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Địa chỉ</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter address"
+              placeholder="Địa chỉ"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
           </Form.Group>
 
           <Form.Group controlId="formBasicRole">
-            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Role</Form.Label>
+            <Form.Label style={{fontWeight:'600',margin:'10px 0'}}>Quyền</Form.Label>
             <Form.Control
               as="select"
               value={role}
               onChange={(e) => setRole(e.target.value)}
             >
-              <option value="user" style={{fontWeight:'600',margin:'10px 0'}}>User</option>
+              <option value="user" style={{fontWeight:'600',margin:'10px 0'}}>Người dùng</option>
             </Form.Control>
           </Form.Group>
 
           <Button variant="primary" type="submit" style={{background:'#73262C'}}>
-            Sign Up
+            Đăng ký
           </Button>
         </Form>
 

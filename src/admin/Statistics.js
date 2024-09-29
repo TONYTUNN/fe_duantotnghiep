@@ -14,9 +14,8 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import '../style/statistics.css'; // Đảm bảo đường dẫn đến file CSS đúng
+import '../style/statistics.css';
 
-// Đăng ký các thành phần cần thiết với Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -32,6 +31,7 @@ const Statistics = () => {
   const [yearlySalesStats, setYearlySalesStats] = useState([]);
   const [revenueStats, setRevenueStats] = useState([]);
   const [productStats, setProductStats] = useState({});
+  const [storeRevenueStats, setStoreRevenueStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -41,20 +41,17 @@ const Statistics = () => {
         const orderResponse = await axios.get('http://localhost:4000/orders');
         setOrderData(orderResponse.data);
 
-        const yearlySalesResponse = await axios.get(
-          'http://localhost:4000/sales/yearly',
-        );
+        const yearlySalesResponse = await axios.get('http://localhost:4000/sales/yearly');
         setYearlySalesStats(yearlySalesResponse.data);
 
-        const revenueResponse = await axios.get(
-          'http://localhost:4000/revenue-stats',
-        );
+        const revenueResponse = await axios.get('http://localhost:4000/revenue-stats');
         setRevenueStats(revenueResponse.data);
 
-        const productResponse = await axios.get(
-          'http://localhost:4000/product-stats',
-        );
+        const productResponse = await axios.get('http://localhost:4000/product-stats');
         setProductStats(productResponse.data);
+
+        const storeRevenueResponse = await axios.get('http://localhost:4000/revenue-per-store');
+        setStoreRevenueStats(storeRevenueResponse.data || []);
 
         setLoading(false);
       } catch (err) {
@@ -93,13 +90,14 @@ const Statistics = () => {
 
   // Prepare data for the revenue stats chart
   const revenueChartData = {
-    labels: revenueStats.map(stat => stat.Name),
+    labels: revenueStats.map(stat => stat.Name || 'Không xác định'),
     datasets: [
       {
         label: 'Doanh thu theo sản phẩm',
-        data: revenueStats.map(stat =>
-          parseFloat(stat.TotalRevenue.replace(/,/g, '')),
-        ), // Remove commas from TotalRevenue
+        data: revenueStats.map(stat => {
+          const revenue = stat.TotalRevenue || '0';
+          return parseFloat(revenue.replace(/,/g, ''));
+        }),
         backgroundColor: 'rgba(255, 99, 132, 0.6)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1,
@@ -114,24 +112,43 @@ const Statistics = () => {
 
   // Prepare data for the yearly sales chart
   const yearlySalesChartData = {
-    labels: yearlySalesStats.map(stat => stat.year),
+    labels: yearlySalesStats.map(stat => stat.year || 'Không xác định'),
     datasets: [
       {
         label: 'Doanh số hàng năm',
-        data: yearlySalesStats.map(stat =>
-          parseFloat(stat.totalSales.replace(/,/g, '')),
-        ), // Remove commas from totalSales
+        data: yearlySalesStats.map(stat => {
+          const sales = stat.totalSales || '0';
+          return parseFloat(sales.replace(/,/g, ''));
+        }),
         backgroundColor: 'rgba(54, 162, 235, 0.6)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1,
       },
       {
         label: 'Số lượng hàng năm',
-        data: yearlySalesStats.map(stat =>
-          parseFloat(stat.totalQuantity.replace(/,/g, '')),
-        ), // Remove commas from totalQuantity
+        data: yearlySalesStats.map(stat => {
+          const quantity = stat.totalQuantity || '0';
+          return parseFloat(quantity.replace(/,/g, ''));
+        }),
         backgroundColor: 'rgba(153, 102, 255, 0.6)',
         borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  // Prepare data for the store revenue chart
+  const storeRevenueChartData = {
+    labels: storeRevenueStats.map(stat => stat.StoreName || 'Không xác định'),
+    datasets: [
+      {
+        label: 'Doanh thu theo cửa hàng',
+        data: storeRevenueStats.map(stat => {
+          const revenue = stat.TotalRevenue || '0';
+          return parseFloat(revenue.replace(/,/g, ''));
+        }),
+        backgroundColor: 'rgba(255, 159, 64, 0.6)',
+        borderColor: 'rgba(255, 159, 64, 1)',
         borderWidth: 1,
       },
     ],
@@ -165,7 +182,7 @@ const Statistics = () => {
           <Card className="card-custom">
             <Card.Body>
               <Card.Title>Số lượng sản phẩm</Card.Title>
-              <Card.Text>{totalProducts}</Card.Text>
+              <Card.Text>{totalProducts.toLocaleString()}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -173,7 +190,7 @@ const Statistics = () => {
           <Card className="card-custom">
             <Card.Body>
               <Card.Title>Số lượng còn hàng</Card.Title>
-              <Card.Text>{inStock}</Card.Text>
+              <Card.Text>{(inStock * 10000).toLocaleString()}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -181,7 +198,7 @@ const Statistics = () => {
           <Card className="card-custom">
             <Card.Body>
               <Card.Title>Số lượng hết hàng</Card.Title>
-              <Card.Text>{outOfStock}</Card.Text>
+              <Card.Text>{outOfStock.toLocaleString()}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -209,6 +226,17 @@ const Statistics = () => {
             <h2 className="chart-title">Doanh số và số lượng hàng năm</h2>
             <div className="chart-container" style={{ height: '300px' }}>
               <Bar data={yearlySalesChartData} options={chartOptions} />
+            </div>
+          </div>
+        </Col>
+      </Row>
+
+      <Row className="mb-4">
+        <Col md={12}>
+          <div className="chart-row">
+            <h2 className="chart-title">Doanh thu theo cửa hàng</h2>
+            <div className="chart-container" style={{ height: '300px' }}>
+              <Bar data={storeRevenueChartData} options={chartOptions} />
             </div>
           </div>
         </Col>

@@ -7,7 +7,7 @@ import '../style/admin.css';
 const Admin = () => {
   return (
     <Container fluid className="admin-container">
-      <h1 className="admin-title">Admin Dashboard</h1>
+      <h1 className="admin-title"></h1>
 
       <Row className="g-0">
         <Col md={3} className="admin-sidebar">
@@ -35,7 +35,7 @@ const Admin = () => {
             </Card.Body>
           </Card>
 
-          <Card className="admin-card">
+          {/* <Card className="admin-card">
             <Card.Body>
               <Card.Title className="admin-card-title">
                 Quản lý khuyến mãi
@@ -46,7 +46,7 @@ const Admin = () => {
                 </Button>
               </Link>
             </Card.Body>
-          </Card>
+          </Card> */}
 
           <Card className="admin-card">
             <Card.Body>
@@ -86,9 +86,9 @@ const Admin = () => {
           </Card>
         </Col>
 
-        {/* <Col md={9} className="admin-main-content">
+        <Col md={9} className="admin-main-content">
           <Statistics />
-        </Col> */}
+        </Col>
       </Row>
     </Container>
   );

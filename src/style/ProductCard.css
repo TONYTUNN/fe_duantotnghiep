@@ -224,3 +224,105 @@ margin-right: 10px;
   font-weight: bold;
   border-radius: 10px;
 }
+/*  */
+/* Best sellers container */
+.best-sellers-container {
+  margin-top: 2rem;
+  padding: 20px;
+  background-color: #fff9e5;
+  border-radius: 10px;
+}
+
+.best-sellers-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #73262C;
+}
+
+/* Best sellers list */
+.best-sellers-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Evenly distribute items */
+  gap: 20px; /* Space between items */
+}
+
+/* Each product card */
+.best-sellers-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  width: calc(20% - 20px); /* 20% width per product minus gap for 5 items */
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.best-sellers-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Product image */
+.best-sellers-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  object-fit: cover;
+}
+
+/* Product name */
+.best-sellers-item .product-name {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+  text-transform: capitalize;
+}
+
+/* View details button */
+.btn-best-seller {
+  background-color: #73262C;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-best-seller:hover {
+  background-color: #A33B42;
+}
+#btn-tl {
+  background-color: #73262C;
+  color: #fff;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 1200px) {
+  .best-sellers-item {
+    width: calc(25% - 20px); /* Show 4 items per row */
+  }
+}
+
+@media (max-width: 992px) {
+  .best-sellers-item {
+    width: calc(33.33% - 20px); /* Show 3 items per row */
+  }
+}
+
+@media (max-width: 768px) {
+  .best-sellers-item {
+    width: calc(50% - 20px); /* Show 2 items per row */
+  }
+}
+
+@media (max-width: 576px) {
+  .best-sellers-item {
+    width: 100%; /* Full width on small screens */
+  }
+}

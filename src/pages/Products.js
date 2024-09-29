@@ -71,7 +71,7 @@ const Products = () => {
         </div>
       )}
 
-      <h1 className="text-center my-4">Our Products</h1>
+      <h1 className="text-center my-4">Sản Phẩm </h1>
 
       <div className="d-flex flex-column flex-md-row text-center">
         <div
@@ -129,7 +129,7 @@ const Products = () => {
               <FaArrowLeft />
             </Button>
             <span>
-              Page {currentPage} of{' '}
+               {currentPage} page{' '}
               {Math.ceil(filteredProducts.length / productsPerPage)}
             </span>
             <Button

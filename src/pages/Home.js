@@ -60,7 +60,7 @@ const Home = () => {
         
         <Row>
           <Col>
-            <h2>Our Products</h2>
+            <h2>Sản phẩm mới </h2>
             <ProductList />
           </Col>
         </Row>

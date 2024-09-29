@@ -34,6 +34,28 @@ const CheckoutPage = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [stores, setStores] = useState([]);
   const { errorToast, successToast } = useToast();
+  const [showQRCodeModal, setShowQRCodeModal] = useState(false); // State for QR Code modal
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
+  const [showError, setShowError] = useState(false);
+  // test
+  // 
+
+  const generateQRCode = async (text) => {
+    try {
+      const response = await axios.get('http://localhost:4000/generate-qr', {
+        params: { text }
+      });
+      setQrCodeUrl(response.data.qrCodeUrl);
+      setShowQRCodeModal(true); // Show QR code modal after generating QR code
+    } catch (error) {
+      console.error('Error generating QR code:', error);
+    }
+  };
+
+  const handleGenerateQRCode = () => {
+    const text = 'Some text to encode in QR code'; // Replace with dynamic content as needed
+    generateQRCode(text);
+  };
 
   useEffect(() => {
     const fetchStores = async () => {
@@ -76,16 +98,28 @@ const CheckoutPage = () => {
 
   const calculateTotal = () => {
     const total = cartItems.reduce(
-      (total, item) => total + Number(item.Price) * item.quantity,
+      (total, item) => total + Number(item.Price) * 1000 * item.quantity,
       0,
     );
-    return total.toFixed(2);
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(total);
   };
+  // const handlePlaceOrder = async e => {
+  //   e.preventDefault();
+  //   setShowModal(true);
+  // };
 
   const handlePlaceOrder = async e => {
     e.preventDefault();
-    setShowModal(true);
+    if (formValues.Address && formValues.City && formValues.Zip && formValues.StoreID) {
+      setShowModal(true);
+    } else {
+      setShowError(true);
+    }
   };
+
 
   const handlePaymentMethodSelect = async method => {
     setShowModal(false);
@@ -148,7 +182,7 @@ const CheckoutPage = () => {
         <div className="order-success">
           <div>
             <p>Đặt hàng thành công! Cảm ơn bạn đã mua hàng.</p>
-            <img src={checkMark} className="checlMask" />
+            <img style={{ margin: 'auto' }} src={checkMark} className="checlMask" />
           </div>
         </div>
       ) : cartItems.length === 0 ? (
@@ -204,11 +238,11 @@ const CheckoutPage = () => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicZip">
                   <Form.Label style={{ fontWeight: '600', margin: '10px 0' }}>
-                    Mã ZIP
+                    Số điện thoại
                   </Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Nhập mã ZIP"
+                    placeholder="Nhập số điện thoại"
                     name="Zip"
                     value={formValues.Zip}
                     onChange={handleChange}
@@ -244,7 +278,7 @@ const CheckoutPage = () => {
                   </Card>
                 ))}
                 <div className="total-price text-center mt-3">
-                  <h5>Tổng cộng: ${calculateTotal()}</h5>
+                  <p>Tổng giá sản phẩm: {calculateTotal()}</p>
                 </div>
               </div>
             </Col>
@@ -270,10 +304,52 @@ const CheckoutPage = () => {
                     <PaypalSubscriptionButton onSuccess={handlePayPalSuccess} />
                   </div>
                 </Col>
+                {/* <Col xs={6}>
+                  <Button
+                    variant="custom"
+                    className="w-100 payment-button"
+                    style={{ background: '#73262C', color: '#fff' }}
+                  >
+                    Thanh toán QR zalopay
+                  </Button>
+                </Col> */}
+                <Col xs={6}>
+                  <Button
+                    variant="custom"
+                    className="w-100 payment-button"
+                    style={{ background: '#73262C', color: '#fff' }}
+                    onClick={handleGenerateQRCode} // Thêm sự kiện onClick để gọi API tạo mã QR
+                  >
+                    Thanh toán QR ZaloPay
+                  </Button>
+                </Col>
               </Row>
             </Modal.Body>
           </Modal>
           {/* Success Modal */}
+          {/* QR Code Modal */}
+          <Modal
+            show={showQRCodeModal}
+            onHide={() => setShowQRCodeModal(false)}
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Zalo Pay QR Code</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="text-center">
+              {qrCodeUrl ? (
+                <div>
+                  <h3 className='zalo-pay'>Zalo Pay QR Code:</h3>
+                  <img src={qrCodeUrl} alt="QR Code" style={{ maxWidth: '100%' }} />
+                </div>
+              ) : (
+                <div>
+                  <img style={{ margin: 'auto' }} src="data:image/png;base64,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" alt="ZaloPay QR Code" />
+                </div>
+              )}
+            </Modal.Body>
+          </Modal>
+
           <Modal
             show={showSuccessModal}
             onHide={() => setShowSuccessModal(false)}
@@ -283,7 +359,10 @@ const CheckoutPage = () => {
               <Modal.Title>Đơn Hàng Của Bạn Đã Đặt Thành Công</Modal.Title>
             </Modal.Header>
             <Modal.Body className="text-center">
-              <h5>Chúng tôi sẽ giao hàng cho bạn trong ngày hôm nay.</h5>
+              <h5>Chúng tôi sẽ giao hàng cho bạn trong thời gian sớm nhất.</h5>
+              <p style={{ color: '#d9534f', marginTop: '10px' }}>
+                <strong>Chú ý:</strong> Vui lòng kiểm tra lại số điện thoại của bạn để chúng tôi có thể liên hệ dễ dàng nếu cần thiết.
+              </p>
               <Button
                 variant="custom"
                 onClick={() => setShowSuccessModal(false)}
@@ -293,6 +372,7 @@ const CheckoutPage = () => {
               </Button>
             </Modal.Body>
           </Modal>
+
         </>
       )}
     </Container>
@@ -300,3 +380,8 @@ const CheckoutPage = () => {
 };
 
 export default CheckoutPage;
+
+
+// // // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+

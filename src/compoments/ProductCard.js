@@ -12,6 +12,7 @@ const ProductCard = ({ product }) => {
   const [comments, setComments] = useState([]);
   const [users, setUsers] = useState({});
   const [error, setError] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [replyText, setReplyText] = useState('');
   const [replyToCommentId, setReplyToCommentId] = useState(null);
   const [newCommentText, setNewCommentText] = useState('');
@@ -26,8 +27,31 @@ const ProductCard = ({ product }) => {
   };
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleShow = () => setShow(true);
 
+  // api best seller
+  const [bestSellers, setBestSellers] = useState([]);
+// 
+const handleShow = (product) => {
+  setSelectedProduct(product);  
+  setShow(true);              
+};
+useEffect(() => {
+  const fetchBestSellers = async () => {
+    try {
+      const response = await axios.get('http://localhost:4000/latest-sales');
+      setBestSellers(response.data);
+    } catch (err) {
+      setError('Không thể lấy danh sách sản phẩm bán chạy. Vui lòng thử lại sau.');
+    }
+  };
+
+  if (show) {
+    fetchBestSellers();
+  }
+}, [show]);
+
+  // 
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -125,6 +149,10 @@ const ProductCard = ({ product }) => {
       );
     }
   };
+  const handleProductClick = (item) => {
+    setSelectedProduct(item);
+    handleShow(); // Show modal when product is clicked
+  };
 
   const handleNewCommentChange = e => setNewCommentText(e.target.value);
 
@@ -202,7 +230,7 @@ const ProductCard = ({ product }) => {
             }}
           >
             <Card.Text style={{ fontWeight: '600', fontSize: '15px' }}>
-              {product.Price} VND
+              {product.Price*1000} VND
             </Card.Text>
             <button
               className="btn-product-cart-body"
@@ -289,11 +317,30 @@ const ProductCard = ({ product }) => {
             </div>
           </div>
           <div style={{ marginTop: '2rem' }}>
-            <h5>Comments:</h5>
+            {/*  */}
+            <div className="best-sellers-container">
+              <h2>Sản phẩm bán chạy:</h2>
+              {bestSellers.length > 0 ? (
+                <ul className="best-sellers-list">
+                  {bestSellers.slice(0, 5).map((item, index) => (
+                    <li key={index} className="best-sellers-item" onClick={() => handleProductClick(item)}>
+                      <img src={item.ImagePath} alt={item.Name} />
+                      <div className="product-name">{item.Name}</div>
+                      <button className='btn-best-saleller' onClick={() => handleProductClick(item)}></button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Không có sản phẩm bán chạy.</p>
+              )}
+            </div>
+            <hr />
+            {/*  */}
+            <h5>bình luận:</h5>
             {error ? (
               <p style={{ color: 'red' }}>{error}</p>
             ) : (
-              <p>No comments yet.</p>
+              <p>không có bình luận.</p>
             )}
             {comments.length > 0 &&
               comments.map(comment => (
@@ -313,7 +360,7 @@ const ProductCard = ({ product }) => {
                     <button
                       onClick={() => handleHideComment(comment.CommentID)}
                     >
-                      Hide
+                      Ẩn
                     </button>
                   )}
                   <Form onSubmit={handleReplySubmit}>
@@ -322,9 +369,9 @@ const ProductCard = ({ product }) => {
                       placeholder="Trả lời..."
                       value={replyText}
                       onChange={handleReplyChange}
-                      onClick={() => setReplyToCommentId(comment.CommentID)}
+                      onClick={() => setReplyToCommentId(comment.CommentID)} 
                     />
-                    <Button type="submit">Reply</Button>
+                    <Button id='btn-tl' type="submit">Trả lời</Button>
                   </Form>
                 </div>
               ))}
